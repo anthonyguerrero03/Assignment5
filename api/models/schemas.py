@@ -50,21 +50,34 @@ class RecipeBase(BaseModel):
 
 
 class RecipeCreate(RecipeBase):
+    amount: int
     sandwich_id: int
     resource_id: int
+    recipe_name: str
+
+    # Added to help ensure the validation for optional fields
+    class Config:
+        orm_mode = True  # This helps FastAPI to work correctly with SQLAlchemy models
+
 
 class RecipeUpdate(BaseModel):
     sandwich_id: Optional[int] = None
     resource_id: Optional[int] = None
     amount: Optional[int] = None
+    recipe_name: Optional[str] = None  # Added for consistency in updates
+
+    class Config:
+        orm_mode = True
+
 
 class Recipe(RecipeBase):
     id: int
     sandwich: Sandwich = None
     resource: Resource = None
+    recipe_name: str  # Added this for consistency and correct mapping to the database model
 
-    class ConfigDict:
-        from_attributes = True
+    class Config:
+        orm_mode = True  # Helps with automatic data transformation for responses
 
 
 class OrderDetailBase(BaseModel):
@@ -74,6 +87,8 @@ class OrderDetailBase(BaseModel):
 class OrderDetailCreate(OrderDetailBase):
     order_id: int
     sandwich_id: int
+    quantity: int
+
 
 class OrderDetailUpdate(BaseModel):
     order_id: Optional[int] = None
@@ -107,7 +122,7 @@ class OrderUpdate(BaseModel):
 class Order(OrderBase):
     id: int
     order_date: Optional[datetime] = None
-    order_details: list[OrderDetail] = None
+    order_details: list[OrderDetail] = [None]
 
     class ConfigDict:
         from_attributes = True

@@ -5,12 +5,15 @@ from ..models import models, schemas
 def create(db: Session, recipe: schemas.RecipeCreate):
     db_recipe = models.Recipe(
         recipe_name=recipe.recipe_name,
-        ingredients=recipe.ingredients
+        amount=recipe.amount,
+        sandwich_id=recipe.sandwich_id,
+        resource_id=recipe.resource_id
     )
     db.add(db_recipe)
     db.commit()
     db.refresh(db_recipe)
     return db_recipe
+
 
 def read_all(db: Session):
     return db.query(models.Recipe).all()

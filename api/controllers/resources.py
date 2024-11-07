@@ -3,14 +3,16 @@ from fastapi import HTTPException, status, Response, Depends
 from ..models import models, schemas
 
 def create(db: Session, resource: schemas.ResourceCreate):
+    # Use 'item' and 'amount' based on your schema
     db_resource = models.Resource(
-        resource_name=resource.resource_name,
-        quantity=resource.quantity
+        item=resource.item,  # Correct field name is 'item'
+        amount=resource.amount  # Correct field name is 'amount'
     )
     db.add(db_resource)
     db.commit()
     db.refresh(db_resource)
     return db_resource
+
 
 def read_all(db: Session):
     return db.query(models.Resource).all()

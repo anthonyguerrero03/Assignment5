@@ -6,12 +6,13 @@ def create(db: Session, order_detail: schemas.OrderDetailCreate):
     db_order_detail = models.OrderDetail(
         order_id=order_detail.order_id,
         sandwich_id=order_detail.sandwich_id,
-        quantity=order_detail.quantity
+        amount=order_detail.amount  # Change `quantity` to `amount` if this matches the schema
     )
     db.add(db_order_detail)
     db.commit()
     db.refresh(db_order_detail)
     return db_order_detail
+
 
 def read_all(db: Session):
     return db.query(models.OrderDetail).all()
