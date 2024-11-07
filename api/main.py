@@ -53,3 +53,4 @@ def delete_one_order(order_id: int, db: Session = Depends(get_db)):
     if order is None:
         raise HTTPException(status_code=404, detail="User not found")
     return orders.delete(db=db, order_id=order_id)
+
