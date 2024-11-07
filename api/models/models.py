@@ -3,11 +3,12 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 from ..dependencies.database import Base
 
+
 class Sandwich(Base):
     __tablename__ = "sandwiches"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    sandwich_name = Column(String(100), unique=True, nullable=False)
+    sandwich_name = Column(String(100), unique=True, nullable=True)
     price = Column(DECIMAL(4, 2), nullable=False, server_default='0.0')
 
     recipes = relationship("Recipe", back_populates="sandwich")
@@ -19,7 +20,9 @@ class Resource(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     item = Column(String(100), unique=True, nullable=False)
-    amount = Column(Integer, index=True, nullable=False)
+    amount = Column(Integer, index=True, nullable=False, server_default='0.0')
+
+    recipes = relationship("Recipe", back_populates="resource")
 
 
 class Recipe(Base):
@@ -38,8 +41,8 @@ class Order(Base):
     __tablename__ = "orders"
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
-    customer_name = Column(String(100), nullable=False)
-    order_date = Column(DATETIME, nullable=False, default=datetime.utcnow)
+    customer_name = Column(String(100))
+    order_date = Column(DATETIME, nullable=False, server_default=str(datetime.now()))
     description = Column(String(300))
 
     order_details = relationship("OrderDetail", back_populates="order")
